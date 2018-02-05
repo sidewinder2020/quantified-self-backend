@@ -33,21 +33,27 @@ router.get('/:id', function(req, res, next) {
   })
 })
 
-// router.post('/', function(req, res, next) {
-//   var message = req.body.message
-//
-//   if(!message) {
-//     return res.status(422).send({
-//       error: "No message property provided"
-//     })
-//   }
-//
-//   database.raw(
-//     'INSERT INTO secrets(message, created_at) VALUES (?, ?) RETURNING *',
-//     [message, new Date]
-//   ).then(function(secret) {
-//       res.status(201).json(secret.rows)
-//   })
-// })
+router.post('/', function(req, res, next) {
+  var name = req.body.name
+  var calories = req.body.calories
+
+  if(!name) {
+    return res.status(422).send({
+      error: "No name property provided"
+    })
+  }
+  else if(!calories) {
+    return res.status(422).send({
+      error: "No name property provided"
+    })
+  }
+
+  database.raw(
+    'INSERT INTO foods(name, calories, created_at, updated_at) VALUES (?, ?, ?, ?) RETURNING *',
+    [name, calories, new Date, new Date]
+  ).then(function(food) {
+      res.status(201).json(food.rows)
+  })
+})
 
 module.exports = router;
