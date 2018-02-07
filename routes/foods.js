@@ -44,12 +44,12 @@ router.post('/', function(req, res, next) {
   }
   else if(!calories) {
     return res.status(422).send({
-      error: "No name property provided"
+      error: "No calorie property provided"
     })
   }
 
   database.raw(
-    'INSERT INTO foods(name, calories, created_at, updated_at) VALUES (?, ?, ?, ?) RETURNING *',
+    'INSERT INTO foods(name, calories, created_at, updated_at) VALUES (?, ?, ?, ?)',
     [name, calories, new Date, new Date]
   ).then(function(food) {
       res.status(201).json(food.rows)
