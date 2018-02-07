@@ -18,7 +18,7 @@ router.patch('/:id', function(req, res, next) {
     .then(function(success) {
       database('foods').where('id', id)
       .then(function(food) {
-        res.status(201).json(food)
+        res.status(201).json(food[0])
       })
     })
 })
