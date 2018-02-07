@@ -28,7 +28,7 @@ router.get('/:id', function(req, res, next) {
     if(!food.rows) {
       return res.sendStatus(404)
     } else {
-      res.json(food.rows)
+      res.json(food.rows[0])
     }
   })
 })
