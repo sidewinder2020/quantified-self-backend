@@ -28,26 +28,26 @@ router.get('/:id', function(req, res, next) {
     if(!food.rows) {
       return res.sendStatus(404)
     } else {
-      res.json(food.rows)
+      res.json(food.rows[0])
     }
   })
 })
 
-// router.post('/', function(req, res, next) {
-//   var message = req.body.message
-//
-//   if(!message) {
-//     return res.status(422).send({
-//       error: "No message property provided"
-//     })
-//   }
-//
-//   database.raw(
-//     'INSERT INTO secrets(message, created_at) VALUES (?, ?)',
-//     [message, new Date]
-//   ).then(function(secret) {
-//       res.status(201).json(secret.rows)
-//   })
-// })
+router.post('/', function(req, res, next) {
+  var message = req.body.message
+
+  if(!message) {
+    return res.status(422).send({
+      error: "No message property provided"
+    })
+  }
+
+  database.raw(
+    'INSERT INTO secrets(message, created_at) VALUES (?, ?)',
+    [message, new Date]
+  ).then(function(secret) {
+      res.status(201).json(secret.rows)
+  })
+})
 
 module.exports = router;

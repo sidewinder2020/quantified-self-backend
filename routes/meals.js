@@ -39,7 +39,7 @@ router.post('/:id/foods/:food_id', function(req, res, next) {
   var mealId = req.params.id
   var foodId = req.params.food_id
 
-  // implement a promise.all to check for join row AFTER 
+  // implement a promise.all to check for join row AFTER
 
   database.raw(
     'INSERT INTO mealsfoods (meal_id, food_id, created_at, updated_at) VALUES (?, ?, ?, ?)',
