@@ -43,7 +43,7 @@ router.get('/:id', function(req, res, next) {
 //   }
 //
 //   database.raw(
-//     'INSERT INTO secrets(message, created_at) VALUES (?, ?) RETURNING *',
+//     'INSERT INTO secrets(message, created_at) VALUES (?, ?)',
 //     [message, new Date]
 //   ).then(function(secret) {
 //       res.status(201).json(secret.rows)
