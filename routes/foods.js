@@ -3,10 +3,9 @@ var router = express.Router();
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('../knexfile')[environment]
 const database = require('knex')(configuration)
-pry = require('pryjs')
+const pry = require('pryjs')
 
 router.get('/', function(req, res, next) {
-
   database.raw(
     'SELECT * FROM foods'
   ).then(function(foods) {
@@ -34,20 +33,57 @@ router.get('/:id', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
-  var message = req.body.message
+  var name = req.body.name
+  var calories = req.body.calories
 
-  if(!message) {
+  if(!name) {
     return res.status(422).send({
-      error: "No message property provided"
+      error: "No name property provided"
+    })
+  }
+  else if(!calories) {
+    return res.status(422).send({
+      error: "No calorie property provided"
     })
   }
 
   database.raw(
-    'INSERT INTO secrets(message, created_at) VALUES (?, ?)',
-    [message, new Date]
-  ).then(function(secret) {
-      res.status(201).json(secret.rows)
+    'INSERT INTO foods(name, calories, created_at, updated_at) VALUES (?, ?, ?, ?)',
+    [name, calories, new Date, new Date]
+  ).then(function(food) {
+      res.status(201).json(food.rows)
   })
+})
+
+router.delete('/:id', function(req, res, next) {
+  let id = req.params.id
+
+  return database('foods').where({ id: id }).del()
+  .then(function(result) {
+    if (result === 1) {
+      return res.sendStatus(204)
+    } else {
+      return res.sendStatus(404)
+    }
+  })
+
+router.patch('/:id', function(req, res, next) {
+  let id = req.params.id
+  let updatedInfo = req.body.food
+
+  if (!updatedInfo) {
+    return res.send(422).send({
+      error: "No parameters provided."
+    })
+  }
+
+  database('foods').where('id', id).update(updatedInfo)
+    .then(function(success) {
+      database('foods').where('id', id)
+      .then(function(food) {
+        res.status(201).json(food[0])
+      })
+    })
 })
 
 module.exports = router;
