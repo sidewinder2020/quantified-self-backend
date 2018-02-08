@@ -35,6 +35,39 @@ router.get('/:id/foods', function(req, res, next) {
   })
 })
 
+router.post('/:meal_id/foods/:id', function(req, res, next) {
+  const meal_id = req.params.meal_id
+  const food_id = req.params.id
+  const check_meal_name = database('foods').where({id: food_id}).count('id')
+  const check_food_name = database('meals').where({id: meal_id}).count('id')
+  const find_meal_name = database('foods').where({id: food_id})
+  const find_food_name = database('meals').where({id: meal_id})
+  let food_count, meal_count
+  let food_name, meal_name
+
+  Promise.all([
+    check_meal_name.then(function(result) {food_count = parseInt(result[0].count)}),
+    check_food_name.then(function(result) {meal_count = parseInt(result[0].count)}),
+    find_meal_name.then(function(result) {food_name = result[0].name}),
+    find_food_name.then(function(result) {meal_name = result[0].name}),
+  ])
+    .then(function() {
+      if ((food_count === 1) && (meal_count === 1)) {
+        database('mealsfoods').insert({
+          meal_id: meal_id,
+          food_id: food_id,
+          created_at: (new Date),
+          updated_at: (new Date),
+        })
+          .then(function() {
+            res.send({ "message": `Successfully added ${food_name} to ${meal_name}` })
+          })
+      } else {
+        res.sendStatus(404)
+      }
+    })
+})
+
 router.delete('/:meal_id/foods/:id', function(req, res, next) {
   let meal_id = req.params.meal_id
   let food_id = req.params.id
@@ -56,6 +89,5 @@ router.delete('/:meal_id/foods/:id', function(req, res, next) {
           })
       })
 })
-
 
 module.exports = router;
