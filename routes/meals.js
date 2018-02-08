@@ -69,10 +69,11 @@ router.post('/:meal_id/foods/:id', function(req, res, next) {
 })
 
 router.delete('/:meal_id/foods/:id', function(req, res, next) {
-  let meal_id = req.params.meal_id
-  let food_id = req.params.id
-  let find_meal_name = database('foods').where({id: food_id})
-  let find_food_name = database('meals').where({id: meal_id})
+  const meal_id = req.params.meal_id
+  const food_id = req.params.id
+  const find_meal_name = database('foods').where({id: food_id})
+  const find_food_name = database('meals').where({id: meal_id})
+  let food_name, meal_name
 
   Promise.all([
     find_meal_name.then(function(result) {food_name = result[0].name}),
