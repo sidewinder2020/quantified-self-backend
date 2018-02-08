@@ -3,7 +3,6 @@ var router = express.Router();
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('../knexfile')[environment]
 const database = require('knex')(configuration)
-const pry = require('pryjs')
 
 router.get('/', function(req, res, next) {
   database.raw(
@@ -66,6 +65,7 @@ router.delete('/:id', function(req, res, next) {
       return res.sendStatus(404)
     }
   })
+})
 
 router.patch('/:id', function(req, res, next) {
   let id = req.params.id
