@@ -35,22 +35,4 @@ router.get('/:id/foods', function(req, res, next) {
   })
 })
 
-router.post('/:id/foods/:food_id', function(req, res, next) {
-  var mealId = req.params.id
-  var foodId = req.params.food_id
-
-  // implement a promise.all to check for join row AFTER
-
-  database.raw(
-    'INSERT INTO mealsfoods (meal_id, food_id, created_at, updated_at) VALUES (?, ?, ?, ?)',
-    [mealId, foodId, new Date, new Date]
-  ).then(function(response) {
-    if(!response) {
-      return res.sendStatus(404)
-    } else {
-      res.json({message: "Successfully added food to meal."})
-    }
-  })
-})
-
 module.exports = router;
