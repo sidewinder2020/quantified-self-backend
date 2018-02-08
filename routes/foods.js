@@ -6,7 +6,6 @@ const database = require('knex')(configuration)
 const pry = require('pryjs')
 
 router.get('/', function(req, res, next) {
-
   database.raw(
     'SELECT * FROM foods'
   ).then(function(foods) {
@@ -56,6 +55,18 @@ router.post('/', function(req, res, next) {
   })
 })
 
+router.delete('/:id', function(req, res, next) {
+  let id = req.params.id
+
+  return database('foods').where({ id: id }).del()
+  .then(function(result) {
+    if (result === 1) {
+      return res.sendStatus(204)
+    } else {
+      return res.sendStatus(404)
+    }
+  })
+
 router.patch('/:id', function(req, res, next) {
   let id = req.params.id
   let updatedInfo = req.body.food
@@ -74,5 +85,6 @@ router.patch('/:id', function(req, res, next) {
       })
     })
 })
+
 
 module.exports = router;
