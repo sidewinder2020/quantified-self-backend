@@ -31,7 +31,7 @@ app.use(sassMiddleware({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
   var origin = req.headers.origin
-  if (origin === "https://adrian-lara.github.io/quantified-self/" || origin === "http://localhost:8080/") {
+  if (origin === "https://adrian-lara.github.io" || origin === "http://localhost:8080/") {
     res.header("Access-Control-Allow-Origin", origin);
   }
   res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
