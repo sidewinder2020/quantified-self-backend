@@ -8,7 +8,7 @@ pry = require('pryjs')
 router.get('/', function(req, res, next) {
 
   database.raw(
-    'SELECT * FROM meals'
+    'SELECT m.*, json_agg(f.*) AS foods FROM meals m INNER JOIN mealsfoods mf ON m.id = mf.meal_id INNER JOIN foods f ON mf.food_id = f.id GROUP BY m.id'
   ).then(function(meals) {
     if(!meals.rows) {
       return res.sendStatus(404)
