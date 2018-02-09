@@ -32,8 +32,8 @@ router.get('/:id', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
-  var name = req.body.name
-  var calories = req.body.calories
+  var name = req.body.food.name
+  var calories = req.body.food.calories
 
   if(!name) {
     return res.status(422).send({
@@ -47,10 +47,10 @@ router.post('/', function(req, res, next) {
   }
 
   database.raw(
-    'INSERT INTO foods(name, calories, created_at, updated_at) VALUES (?, ?, ?, ?)',
+    'INSERT INTO foods(name, calories, created_at, updated_at) VALUES (?, ?, ?, ?) RETURNING *',
     [name, calories, new Date, new Date]
   ).then(function(food) {
-      res.status(201).json(food.rows)
+      res.status(201).json(food.rows[0])
   })
 })
 
