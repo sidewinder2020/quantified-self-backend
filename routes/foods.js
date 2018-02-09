@@ -6,7 +6,7 @@ const database = require('knex')(configuration)
 
 router.get('/', function(req, res, next) {
   database.raw(
-    'SELECT * FROM foods'
+    'SELECT * FROM foods ORDER BY created_at ASC'
   ).then(function(foods) {
     if(!foods.rows) {
       return res.sendStatus(404)
